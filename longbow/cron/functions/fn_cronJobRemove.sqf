@@ -34,5 +34,5 @@ if (isServer) then
 	{
 		diag_log format ["RWT_fnc_cronJobRemove: __LINE__: removing job with id: %1",_id];
 	};
-	call compile format ["RWT_var_cronJob_%1 = nil",_id];
+	missionNamespace setVariable [format["RWT_var_cronJob_%1", _id], nil];
 };
