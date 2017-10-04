@@ -79,7 +79,8 @@ if (isServer) then {
 	};
 
 	// write the cron job to variable cronjob_##id
-	_job call compile format ["RWT_var_cronJob_%1 = _this",_index];
+	missionNamespace setVariable [format["RWT_var_cronJob_%1",_index], _job];
+
 	// first time to run this job
 	// rounding down to seconds
 	_first_time = floor (_this select 2);
@@ -108,9 +109,9 @@ if (isServer) then {
 		diag_log format ["RWT_fnc_cronJobAdd: cron schedule after adding a job: %1",RWT_var_cronSchedule];
 	};
 	// get the list of existing jobs for requested time
-	_jobs = call compile format ["missionNamespace getVariable ['RWT_var_cronJobsAt_%1',[]]",_first_time];
+	_jobs = missionNamespace getVariable [format["RWT_var_cronJobsAt_%1",_first_time], []];
 	_jobs pushBack _index;
-	_jobs call compile format ["RWT_var_cronJobsAt_%1 = _this",_first_time];
+	missionNamespace setVariable [format["RWT_var_cronJobsAt_%1", _first_time], _jobs];
 	if (RWT_var_cronDebug) then
 	{
 		diag_log format ["RWT_fnc_cronJobAdd: Exiting function"];

@@ -45,12 +45,12 @@ if (isServer) then {
 
 	// remove event from timetable if it occurs
 	RWT_var_cronSchedule deleteAt 0;
-	_jobs = call compile format ["missionNamespace getVariable ['RWT_var_cronJobsAt_%1',[]]",_earliest];
+	_jobs = missionNamespace getVariable [format["RWT_var_cronJobsAt_%1", _earliest], []];
 
 	// if no jobs at this time, nil this var and exit
 	if (_jobs isEqualTo []) exitWith
 	{
-		[] call compile format ["RWT_var_cronJobsAt_%1 = nil",_earliest];
+		missionNamespace setVariable [format["RWT_var_cronJobsAt_%1", _earliest], nil];
 		false;
 	};
 	
@@ -61,7 +61,7 @@ if (isServer) then {
 		_new_time = 0;
 		_index = _x;
 		// job we run in this iteration
-		_job = call compile format ["RWT_var_cronJob_%1",_index];
+		missionNamespace setVariable [format["RWT_var_cronJob_%1", _index], _job];
 		// finding job interval
 		_interval = _job select 3;
 		// spawn function defined in _job's code
@@ -76,5 +76,5 @@ if (isServer) then {
 		} else {_index call RWT_fnc_cronJobRemove;};
 	} forEach _jobs;
 	// nil var with jobs, since we ran them
-	[] call compile format ["RWT_var_cronJobsAt_%1 = nil",_earliest];
+	missionNamespace setVariable [format["RWT_var_cronJobsAt_%1", _earliest], nil];
 };
